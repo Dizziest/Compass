@@ -3,10 +3,14 @@ package com.example.compassnetguru.viewmodel;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class CompassViewModel extends ViewModel {
@@ -14,9 +18,20 @@ public class CompassViewModel extends ViewModel {
     private float[] geomagnetic = new float[3];
     private float[] gravity = new float[3];
     private float azim = 0f;
-    private float currentAzim = 0f;
+    private MutableLiveData<Float> azimuth = new MutableLiveData<>();
+    private MutableLiveData<Float> bearing = new MutableLiveData<>();
+    private Location destination;
 
-    public void onSensorChanged(SensorEvent event, ImageView image){
+    public LiveData<Float> getAzimuthLiveData(){
+        return azimuth;
+    }
+
+
+    public LiveData<Float> getBearingLiveData(){
+        return bearing;
+    }
+
+    public void onSensorChanged(SensorEvent event, ImageView image, ImageView image2){
         final float alpha = 0.97f;
         synchronized (this) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
@@ -39,17 +54,23 @@ public class CompassViewModel extends ViewModel {
                 SensorManager.getOrientation(R, orientation);
                 azim = (float)Math.toDegrees(orientation[0]);
                 azim = (azim+360)%360;
+                azimuth.postValue(azim);
 
-                Animation animation = new RotateAnimation(-currentAzim, -azim, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                currentAzim = azim;
-
-                animation.setDuration(500);
-                animation.setRepeatCount(0);
-                animation.setFillAfter(true);
-
-                image.startAnimation(animation);
             }
         }
+    }
+
+    public void onDestinationChanged(Float latitude, Float longitude){
+        destination = new Location("location");
+        destination.setLatitude(latitude);
+        destination.setLongitude(longitude);
+    }
+
+    public void onLocationChanged(Location location){
+        if (destination != null){
+            bearing.postValue(location.bearingTo(destination));
+        }
+
     }
 
 }

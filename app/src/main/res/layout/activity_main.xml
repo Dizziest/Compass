@@ -4,15 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SensorActivity">
+    tools:context=".ui.CompassActivity">
 
-    <ImageView
-        android:id="@+id/compassImage"
+    <FrameLayout
+        android:id="@+id/relativelayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/compassImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/compass" />
+
+
+        <ImageView
+            android:id="@+id/arrowImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow2"
+            android:visibility="gone" />
+
+
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/textLatitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativelayout"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:hint="Latitude"
+        android:inputType="numberSigned|numberDecimal" />
+
+    <EditText
+        android:id="@+id/textLongitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativelayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:hint="Longitude"
+        android:inputType="numberSigned|numberDecimal" />
+
+    <Button
+        android:id="@+id/navigateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textLongitude"
+        android:layout_centerHorizontal="true"
+        android:text="Navigate" />
+
+    <Button
+        android:id="@+id/stopNavButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/navigateButton"
+        android:layout_centerHorizontal="true"
+        android:text="Stop Navigating"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:src="@drawable/compass"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>
